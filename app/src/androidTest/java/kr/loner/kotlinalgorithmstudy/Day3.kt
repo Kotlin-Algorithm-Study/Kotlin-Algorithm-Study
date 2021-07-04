@@ -165,7 +165,7 @@ class RankSearch{
 //            val splitInfo = information.split(" ")
 //            applicantList.add(Applicant(splitInfo[0], splitInfo[1], splitInfo[2], splitInfo[3], splitInfo[4]))
 //        }
-//
+//  
 //        val sortedList = applicantList.sortedBy { it.score.toInt() }
 //
 //        query.forEach {eachQuery->
