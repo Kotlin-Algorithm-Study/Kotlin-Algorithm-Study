@@ -12,13 +12,16 @@ import java.util.*
 
 fun main(){
 
-    val matrix = MatrixBorderRotation()
-    matrix.solution(3,3, arrayOf(intArrayOf(1,1,2,2), intArrayOf(1,2,2,3), intArrayOf(2,1,3,2),
-         intArrayOf(2,2,3,3)))
+//    val matrix = MatrixBorderRotation()
+//    matrix.solution(3,3, arrayOf(intArrayOf(1,1,2,2), intArrayOf(1,2,2,3), intArrayOf(2,1,3,2),
+//         intArrayOf(2,2,3,3)))
+//
+//    val bracket = CorrectBracket()
+//    bracket.solution("[](){}")
 
-    val bracket = CorrectBracket()
-    bracket.solution("[](){}")
-
+    val search = RankSearch()
+    search.solution(arrayOf("java backend junior pizza 150","python frontend senior chicken 210","python frontend senior chicken 150","cpp backend senior pizza 260","java backend junior chicken 80","python backend senior chicken 50"),
+    arrayOf("java and backend and junior and pizza 100","python and frontend and senior and chicken 200","cpp and - and senior and pizza 250","- and backend and senior and - 150","- and - and - and chicken 100","- and - and - and - 150"))
 }
 
 /**
@@ -139,4 +142,58 @@ class CorrectBracket{
         }
         return stack.isEmpty() // 비어있다면 옳은괄호 비어있지않다면 옳지않은 괄호
     }
+}
+
+
+class RankSearch{
+
+    fun solution(info: Array<String>, query: Array<String>): IntArray {
+        var answer: IntArray = intArrayOf()
+
+        
+
+        return answer
+    }
+
+
+    //1차 이진탐색 x 효율성 x 2차 점수 이진탐색후 필터 효율성 x
+//    fun solution(info: Array<String>, query: Array<String>): IntArray {
+//        val applicantList = mutableListOf<Applicant>()
+//        val result = mutableListOf<Int>()
+//
+//        info.forEach { information->
+//            val splitInfo = information.split(" ")
+//            applicantList.add(Applicant(splitInfo[0], splitInfo[1], splitInfo[2], splitInfo[3], splitInfo[4]))
+//        }
+//
+//        val sortedList = applicantList.sortedBy { it.score.toInt() }
+//
+//        query.forEach {eachQuery->
+//            val splitQuery = eachQuery.replace("and ", "").split(" ")
+//            val startIndex = binarySearch(sortedList, splitQuery[4].toInt())
+//            println("score -> ${splitQuery[4]} slice -> ${sortedList.slice(IntRange(startIndex, sortedList.size-1))}")
+//            result.add(sortedList.slice(IntRange(startIndex, sortedList.size-1)).filter { (splitQuery[0] == "-" || it.language == splitQuery[0]) && (splitQuery[1] == "-" || it.job == splitQuery[1]) && (splitQuery[2] == "-" || it.career == splitQuery[2]) && (splitQuery[3] == "-" || it.soulFood == splitQuery[3])}.size)
+//        }
+//
+//        println(result)
+//
+//        return result.toIntArray()
+//    }
+//
+//    private fun binarySearch(item: List<Applicant>, score: Int): Int{
+//        var low = 0
+//        var high = item.size
+//        while (low < high){
+//            val mid = low + (high - low) / 2
+//
+//            when{
+//                item[mid].score.toInt() < score -> low = mid + 1
+//                else -> high = mid
+//            }
+//        }
+//
+//        return low
+//    }
+//
+//    data class Applicant(val language: String, val job: String, val career: String, val soulFood: String, val score: String)
 }
