@@ -1,4 +1,4 @@
-package kr.loner.kotlinalgorithmstudy
+package kr.loner.kotlinalgorithmstudy.ryan
 
 import java.util.*
 
@@ -15,10 +15,10 @@ fun main(){
 //   val compress = StringCompress()
 //
 //   println(compress.solution("aaaaaaaaaa"))
-
+//
 //    val chatRoom = OpenChatRoom()
 //    chatRoom.solution(arrayOf("Enter uid1234 Muzi", "Enter uid4567 Prodo","Leave uid1234","Enter uid1234 Prodo","Change uid4567 Ryan"))
-
+//
 //    val plain = PlainSquare()
 //    println(plain.solution(3,3))
 }

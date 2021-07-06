@@ -1,4 +1,4 @@
-package kr.loner.kotlinalgorithmstudy
+package kr.loner.kotlinalgorithmstudy.ryan
 
 import java.util.*
 
