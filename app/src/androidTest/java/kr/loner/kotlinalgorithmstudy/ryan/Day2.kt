@@ -1,7 +1,6 @@
 package kr.loner.kotlinalgorithmstudy.ryan
 
 import java.util.*
-import kotlin.math.ceil
 
 /**
  * KotlinAlgorithmStudy
@@ -13,11 +12,16 @@ import kotlin.math.ceil
 
 fun main() {
 
-//    val table = PredictionTable()
-//    table.solution(2, 1, 1)
+    val matrix = MatrixBorderRotation()
+    print("matrix Min -> ")
+    matrix.solution(3,3, arrayOf(intArrayOf(1,1,2,2), intArrayOf(1,2,2,3), intArrayOf(2,1,3,2),
+         intArrayOf(2,2,3,3))).forEach {
+        print("$it ")
+    }
+    println()
 
-//    val tuple = Tuple()
-//    tuple.solution("{{2},{2,1},{2,1,3},{2,1,3,4}}")
+    val changeBracket = ChangeBracket()
+    println("change -> ${changeBracket.solution("()))((()")}")
 
     val max = MaxCalculator()
     println("result -> ${max.solution("200-300-500-600*40+500+500")}")
@@ -26,65 +30,179 @@ fun main() {
 
 /**
  *
- * Test Case
- *  n = 8 A = 4 B = 7 -> 3
- *  n = 2 A = 1 B = 1 -> 1
+ * x1 y1 x2 y2
+ *
+ * x1 y1 -> x1, y2 -> x2, y2 -> x2, y1 -> x1, y1
+ * 1,1 -> 1,2 -> 2,2 -> 2,1 -> 1,1
+ * 1,2 -> 1,3 -> 2,3 -> 2,2 -> 1,2
+ *
+ * 6 6 [2,2,5,4],[3,3,6,6],[5,1,6,3] -> [8, 10, 25]
+ * 3 3 [1,1,2,2],[1,2,2,3],[2,1,3,2],[2,2,3,3] -> [1, 1, 5, 3]
+ * 100 97 [1,1,100,97] -> [1]
  *
  */
 
-//class PredictionTable {
-//    fun solution(n: Int, a: Int, b: Int): Int {
-//        var answer = 0
-//
-//        var aRank = a.toDouble() // A 올림을 이용하기위해서 Double로 변경
-//        var bRank = b.toDouble() // B 올림을 이용하기위해서 Double로 변경
-//
-//        var table = n // 대진표
-//
-//        while (table/2 != 0){ // 결승에서 만나는 경우도 포함 table 이 2인경우 결승
-//            aRank = ceil(aRank/2) // 1회반복할때마다 절반씩 5인 경우 다음경기엔 3이되어야하므로 올림을 이용하여 몇번재인지 설정
-//            bRank = ceil(bRank/2)
-//
-//            answer++ // 대전횟수 카운트
-//
-//            if (aRank == bRank) // 둘의 값이 동일한경우 대전을 한것이기때문에 탈출
-//                break
-//
-//            table /=2 // 1회반복할때마다 반씩줄어듬
-//        }
-//
-//        println(answer)
-//        return answer
-//    }
-//}
+class MatrixBorderRotation{
+
+    fun solution(rows: Int, columns: Int, queries: Array<IntArray>): IntArray {
+
+        val initArray = Array(rows) {row -> IntArray(columns) { i -> row*columns + i + 1 } } // 행렬 생성
+
+        val minResult = mutableListOf<Int>()
+
+        queries.forEach {
+            var blankValue = 0
+            val result = mutableListOf<Int>()
+
+            for(i in it[1]..it[3]){// → 방향 회전
+                if (i == it[1]){
+                    blankValue = initArray[it[0]-1][i-1] //처음 회전방향은 첫 값이 비어있기때문에
+                    result.add(blankValue)
+                    continue
+                }
+                else{
+                    val temp = blankValue
+                    blankValue = initArray[it[0]-1][i-1]
+                    result.add(blankValue)
+                    initArray[it[0]-1][i-1] = temp
+                }
+            }
+
+            for (i in it[0]..it[2]){// ↓ 방향 회전
+                if (i == it[0])// 처음에는 이미 동일값을 가지고있기때문에 스킵
+                    continue
+                else{
+                    val temp = blankValue
+                    blankValue = initArray[i-1][it[3]-1]
+                    result.add(blankValue)
+                    initArray[i-1][it[3]-1] = temp
+                }
+            }
+
+            for (i in it[3] downTo it[1]){// ← 방향 회전
+                if (i == it[3])
+                    continue
+                else{
+                    val temp = blankValue
+                    blankValue = initArray[it[2]-1][i-1]
+                    result.add(blankValue)
+                    initArray[it[2]-1][i-1] = temp
+                }
+            }
+
+            for (i in it[2] downTo it[0]){// ↑ 방향 회전
+                if (i == it[2])
+                    continue
+                else{
+                    val temp = blankValue
+                    blankValue = initArray[i-1][it[1]-1]
+                    result.add(blankValue)
+                    initArray[i-1][it[1]-1] = temp
+                }
+            }
+
+            if (!result.isNullOrEmpty()) {
+                result.sort() // 오름차순 정렬
+                minResult.add(result[0]) // 최소값 넣어줌.
+            }
+        }
+
+        return minResult.toIntArray()
+    }
+
+}
 
 /**
  *
- *  Test Case
+ * TestCase
  *
- *  s = {{2},{2,1},{2,1,3},{2,1,3,4}} -> [2,1,3,4]
- *  s = {{1,2,3},{2,1},{1,2,4,3},{2}} -> [2,1,3,4]
- *  s = {{20,111},{111}} -> [111,20]
- *  s = {{123}} -> [123]
- *  s = {{4,2,3},{3},{2,3,4,1},{2,3}} -> [3,2,4,1]
+ * (()())() -> (()())()
+ * )( -> ()
+ * ()))((() -> ()(())()
+ *
  */
 
-//class Tuple{
-//    fun solution(s: String): IntArray {
-//
-//        val filteredTuple = s.substring(2, s.length - 2).split("},{") // {{},{}} 의 스트링에서 [[], [], []] 형태의 리스트로 변환
-//
-//        val calculatorTuple = hashMapOf<Int, Int>() // 숫자, 몇번 나왔는지의 대한 카운트
-//
-//        filteredTuple.forEach { it.split(",").forEach { s: String ->
-//            calculatorTuple[s.toInt()] = calculatorTuple.getOrDefault(s.toInt(), 0) + 1 //키가 존재한다면 +1 없다면 1
-//        } }
-//
-//        val sortedTuple = calculatorTuple.toList().sortedWith(compareBy { it.second }).reversed().toMap() // value로 내림차순 정렬
-//
-//        return sortedTuple.keys.toIntArray() // 정렬된 key들을 배열로 변환
-//    }
-//}
+class ChangeBracket{
+    fun solution(p: String): String {
+
+        //1. 입력이 빈문자열인경우 빈문자열 반환
+        if (p.isEmpty()) return p
+
+        //2. 문자열 w를 균형잡힌 두 문자열 u, v로 변환
+        val isCorrectIndex = checkCorrect(p)
+        val u = p.slice(0 until isCorrectIndex)
+        val v = p.slice(isCorrectIndex until p.length)
+
+        var answer = ""
+
+        //3. 문자열 u가 "올바른 괄호 문자열" 이라면 문자열 v에 대해 1단계부터 다시 수행합니다.
+        if (isCorrect(u))  return u + solution(v) // 3.1 수행한 결과 문자열을 u에 이어 붙인 후 반환합니다.
+
+        else{ //4. 올바른 문자열이 아닌경우
+            answer += "(" // 4.1 빈문자열에 첫번째문자로 (
+
+            answer += solution(v) // 4.2 문자열 v에 대해 1단계부터 재귀적으로 수행한 결과 문자열을 이어 붙입니다.
+
+            answer += ")" // 4.3 ')'를 다시 붙입니다.
+
+            //4.4 u의 첫 번째와 마지막 문자를 제거하고, 나머지 문자열의 괄호 방향을 뒤집어서 뒤에 붙입니다.
+            u.forEachIndexed{index, c ->
+                if (index != 0 && index != u.length-1){
+                    answer += if (c == '(') ")"
+                    else "("
+                }
+            }
+        }
+
+        //4.5 생성된 문자열을 반환합니다.
+        return answer
+    }
+
+    private fun checkCorrect(p: String) : Int{
+
+        var pos = 0 // ( ) 갯수가 같은위치의 카운트
+        var left = 0 // ( 카운트
+        var right = 0 // ) 카운트
+
+        run {
+            p.forEachIndexed { index, it ->
+                if (it == '(') left++
+                else right ++
+
+                //println("index -> $index left -> $left right -> $right")
+
+                if (left == right) {
+                    pos = index + 1 // 스트링의 인덱스는 0부터시작이기때문에 +1을 해주어야함.
+                    return@run
+                }
+            }
+        }
+
+        return pos
+
+    }
+
+    private fun isCorrect(p: String): Boolean{ // 올바른괄호 문자열인지 확인
+
+        val stack = Stack<Char>()
+
+        p.forEach {
+            if (stack.isEmpty()) // 비어있다면 push
+                stack.push(it)
+            else{
+                if (it == ')' && stack.peek() == '(') //비어있지않다면 )경우에 스택의 마지막값이 ( 이라면 pop
+                    stack.pop()
+                else // 아닌경우는 push
+                    stack.push(it)
+            }
+        }
+
+        return stack.isEmpty()
+
+    }
+}
+
+
 
 /**
  *
@@ -97,7 +215,6 @@ fun main() {
 
 class MaxCalculator {
     fun solution(expression: String): Long {
-        var answer: Long = 0
 
         val priorityOperator = arrayOf("*+-", "*-+", "+*-", "+-*", "-*+", "-+*") // 우선순위
 
@@ -146,7 +263,7 @@ class MaxCalculator {
                             }
                         }else calculator.push(beforeExpression[i]) // 연산자와 동일하지않다면 스택에 삽입
                     }
-                    println("all -> $operator single -> $singleOperator $calculator")
+                    //println("all -> $operator single -> $singleOperator $calculator")
                 }
 
                 beforeExpression.clear() // 1회 반복할때마다 계산한 결과값들이 들어가야하기때문에 먼저 리스트 초기화
@@ -156,7 +273,7 @@ class MaxCalculator {
                 }
                 beforeExpression.reverse() // 스택은 선입후출이기때문에 뒤의내용이 먼저나오게됨. 따라서 뒤집어주어야 정상적
 
-                println(beforeExpression)
+               // println(beforeExpression)
             }
             result.add(beforeExpression[0].removePrefix("-").toLong()) // 마지막에는 한개만 가지고있는 리스트가 반환되기에 -인경우 삭제해주고 결과리스트에 삽입
         }

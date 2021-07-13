@@ -26,123 +26,65 @@ fun main(){
 
 /**
  *
- * x1 y1 x2 y2
+ *  Test Case
  *
- * x1 y1 -> x1, y2 -> x2, y2 -> x2, y1 -> x1, y1
- * 1,1 -> 1,2 -> 2,2 -> 2,1 -> 1,1
- * 1,2 -> 1,3 -> 2,3 -> 2,2 -> 1,2
+ *  s = {{2},{2,1},{2,1,3},{2,1,3,4}} -> [2,1,3,4]
+ *  s = {{1,2,3},{2,1},{1,2,4,3},{2}} -> [2,1,3,4]
+ *  s = {{20,111},{111}} -> [111,20]
+ *  s = {{123}} -> [123]
+ *  s = {{4,2,3},{3},{2,3,4,1},{2,3}} -> [3,2,4,1]
+ */
+
+//class Tuple{
+//    fun solution(s: String): IntArray {
+//
+//        val filteredTuple = s.substring(2, s.length - 2).split("},{") // {{},{}} 의 스트링에서 [[], [], []] 형태의 리스트로 변환
+//
+//        val calculatorTuple = hashMapOf<Int, Int>() // 숫자, 몇번 나왔는지의 대한 카운트
+//
+//        filteredTuple.forEach { it.split(",").forEach { s: String ->
+//            calculatorTuple[s.toInt()] = calculatorTuple.getOrDefault(s.toInt(), 0) + 1 //키가 존재한다면 +1 없다면 1
+//        } }
+//
+//        val sortedTuple = calculatorTuple.toList().sortedWith(compareBy { it.second }).reversed().toMap() // value로 내림차순 정렬
+//
+//        return sortedTuple.keys.toIntArray() // 정렬된 key들을 배열로 변환
+//    }
+//}
+
+/**
  *
- * 100 97 [1,1,100,97] -> [1]
+ * Test Case
+ *  n = 8 A = 4 B = 7 -> 3
+ *  n = 2 A = 1 B = 1 -> 1
  *
  */
 
-class MatrixBorderRotation{
-
-    fun solution(rows: Int, columns: Int, queries: Array<IntArray>): IntArray {
-
-        val initArray = Array(rows) {row -> IntArray(columns) { i -> row*columns + i + 1 } } // 행렬 생성
-
-        val minResult = mutableListOf<Int>()
-
-        queries.forEach {
-            var blankValue = 0
-            val result = mutableListOf<Int>()
-
-            for(i in it[1]..it[3]){// → 방향 회전
-                if (i == it[1]){
-                    blankValue = initArray[it[0]-1][i-1] //처음 회전방향은 첫 값이 비어있기때문에
-                    result.add(blankValue)
-                    continue
-                }
-                else{
-                    val temp = blankValue
-                    blankValue = initArray[it[0]-1][i-1]
-                    result.add(blankValue)
-                    initArray[it[0]-1][i-1] = temp
-                }
-            }
-
-            for (i in it[0]..it[2]){// ↓ 방향 회전
-                if (i == it[0])// 처음에는 이미 동일값을 가지고있기때문에 스킵
-                    continue
-                else{
-                    val temp = blankValue
-                    blankValue = initArray[i-1][it[3]-1]
-                    result.add(blankValue)
-                    initArray[i-1][it[3]-1] = temp
-                }
-            }
-
-            for (i in it[3] downTo it[1]){// ← 방향 회전
-                if (i == it[3])
-                    continue
-                else{
-                    val temp = blankValue
-                    blankValue = initArray[it[2]-1][i-1]
-                    result.add(blankValue)
-                    initArray[it[2]-1][i-1] = temp
-                }
-            }
-
-            for (i in it[2] downTo it[0]){// ↑ 방향 회전
-                if (i == it[2])
-                    continue
-                else{
-                    val temp = blankValue
-                    blankValue = initArray[i-1][it[1]-1]
-                    result.add(blankValue)
-                    initArray[i-1][it[1]-1] = temp
-                }
-            }
-
-            if (!result.isNullOrEmpty()) {
-                result.sort() // 오름차순 정렬
-                minResult.add(result[0]) // 최소값 넣어줌.
-            }
-        }
-
-        return minResult.toIntArray()
-    }
-
-}
-
-
-class CorrectBracket{
-    fun solution(s: String): Int {
-        var answer: Int = 0
-
-        for ( i in s.indices){ // 회전 몇개까지 시킬껀가
-            val value = s.toMutableList() // 리스트로 변환
-            for (j in 0 until i){ // 회전시킬 갯수
-                value.add(value[0]) // 처음것을 맨마지막에 삽입
-                value.removeAt(0) // 처음을 삽입해줬으니 제거
-            }
-
-            if (isCorrect(value)) // 옳은 괄호라면 카운트
-                answer++
-        }
-        return answer
-    }
-
-    private fun isCorrect(bracket: MutableList<Char>): Boolean{
-        val stack = Stack<Char>()
-
-        for (i in bracket.indices){
-            if (stack.isEmpty()) // 스택이 비어있다면 삽입
-                stack.push(bracket[i])
-            else{
-                when(bracket[i]){ // 비어있지않다면 } ] ) 의 경우 스택의내용과 비교한후 삽입하거나 꺼냄
-                    '}' -> if (stack.peek() == '{') stack.pop() else stack.push(bracket[i])
-                    ']' -> if (stack.peek() == '[') stack.pop() else stack.push(bracket[i])
-                    ')' -> if (stack.peek() == '(') stack.pop() else stack.push(bracket[i])
-                    else -> stack.push(bracket[i]) // } ] ) 외의경우는 삽입
-                }
-
-            }
-        }
-        return stack.isEmpty() // 비어있다면 옳은괄호 비어있지않다면 옳지않은 괄호
-    }
-}
+//class PredictionTable {
+//    fun solution(n: Int, a: Int, b: Int): Int {
+//        var answer = 0
+//
+//        var aRank = a.toDouble() // A 올림을 이용하기위해서 Double로 변경
+//        var bRank = b.toDouble() // B 올림을 이용하기위해서 Double로 변경
+//
+//        var table = n // 대진표
+//
+//        while (table/2 != 0){ // 결승에서 만나는 경우도 포함 table 이 2인경우 결승
+//            aRank = ceil(aRank/2) // 1회반복할때마다 절반씩 5인 경우 다음경기엔 3이되어야하므로 올림을 이용하여 몇번재인지 설정
+//            bRank = ceil(bRank/2)
+//
+//            answer++ // 대전횟수 카운트
+//
+//            if (aRank == bRank) // 둘의 값이 동일한경우 대전을 한것이기때문에 탈출
+//                break
+//
+//            table /=2 // 1회반복할때마다 반씩줄어듬
+//        }
+//
+//        println(answer)
+//        return answer
+//    }
+//}
 
 
 class RankSearch{
