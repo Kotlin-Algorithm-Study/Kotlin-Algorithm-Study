@@ -1,7 +1,6 @@
 package kr.loner.kotlinalgorithmstudy.ryan
 
 import java.util.*
-import kotlin.math.ceil
 
 /**
  * KotlinAlgorithmStudy
@@ -13,11 +12,19 @@ import kotlin.math.ceil
 
 fun main() {
 
-    val changeBracket = ChangeBracket()
-    changeBracket.solution("()))((()")
+    val matrix = MatrixBorderRotation()
+    print("matrix Min -> ")
+    matrix.solution(3,3, arrayOf(intArrayOf(1,1,2,2), intArrayOf(1,2,2,3), intArrayOf(2,1,3,2),
+         intArrayOf(2,2,3,3))).forEach {
+        print("$it ")
+    }
+    println()
 
-//    val max = MaxCalculator()
-//    println("result -> ${max.solution("200-300-500-600*40+500+500")}")
+    val changeBracket = ChangeBracket()
+    println("change -> ${changeBracket.solution("()))((()")}")
+
+    val max = MaxCalculator()
+    println("result -> ${max.solution("200-300-500-600*40+500+500")}")
 
 }
 
@@ -29,6 +36,8 @@ fun main() {
  * 1,1 -> 1,2 -> 2,2 -> 2,1 -> 1,1
  * 1,2 -> 1,3 -> 2,3 -> 2,2 -> 1,2
  *
+ * 6 6 [2,2,5,4],[3,3,6,6],[5,1,6,3] -> [8, 10, 25]
+ * 3 3 [1,1,2,2],[1,2,2,3],[2,1,3,2],[2,2,3,3] -> [1, 1, 5, 3]
  * 100 97 [1,1,100,97] -> [1]
  *
  */
@@ -144,7 +153,7 @@ class ChangeBracket{
                 }
             }
         }
-        
+
         //4.5 생성된 문자열을 반환합니다.
         return answer
     }
@@ -160,7 +169,7 @@ class ChangeBracket{
                 if (it == '(') left++
                 else right ++
 
-                println("index -> $index left -> $left right -> $right")
+                //println("index -> $index left -> $left right -> $right")
 
                 if (left == right) {
                     pos = index + 1 // 스트링의 인덱스는 0부터시작이기때문에 +1을 해주어야함.
@@ -206,7 +215,6 @@ class ChangeBracket{
 
 class MaxCalculator {
     fun solution(expression: String): Long {
-        var answer: Long = 0
 
         val priorityOperator = arrayOf("*+-", "*-+", "+*-", "+-*", "-*+", "-+*") // 우선순위
 
@@ -255,7 +263,7 @@ class MaxCalculator {
                             }
                         }else calculator.push(beforeExpression[i]) // 연산자와 동일하지않다면 스택에 삽입
                     }
-                    println("all -> $operator single -> $singleOperator $calculator")
+                    //println("all -> $operator single -> $singleOperator $calculator")
                 }
 
                 beforeExpression.clear() // 1회 반복할때마다 계산한 결과값들이 들어가야하기때문에 먼저 리스트 초기화
@@ -265,7 +273,7 @@ class MaxCalculator {
                 }
                 beforeExpression.reverse() // 스택은 선입후출이기때문에 뒤의내용이 먼저나오게됨. 따라서 뒤집어주어야 정상적
 
-                println(beforeExpression)
+               // println(beforeExpression)
             }
             result.add(beforeExpression[0].removePrefix("-").toLong()) // 마지막에는 한개만 가지고있는 리스트가 반환되기에 -인경우 삭제해주고 결과리스트에 삽입
         }
