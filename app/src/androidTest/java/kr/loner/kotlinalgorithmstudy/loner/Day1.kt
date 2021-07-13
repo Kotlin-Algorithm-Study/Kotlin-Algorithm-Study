@@ -2,22 +2,30 @@ package kr.loner.kotlinalgorithmstudy.loner
 
 
 fun main() {
-    println(멀쩡한_사각형(2,2))}
+    println(문자열_압축("asdasdasd"))}
 
 //https://programmers.co.kr/learn/courses/30/lessons/60057
 private fun `문자열_압축`(text: String): Int {
+
 //리스트 압축 카운트만큼 나온 스트링 리스트를 구하는 일급객체
     val toList: (Int) -> MutableList<String> = { pressCount ->
         val list = mutableListOf<String>()
 
+        //input Text
+        //input ex: asdasdasd
+        // 압축 갯수가 3개면
+        // List<String> { "asd","asd","asd"}
+
         //step 으로 압축 카운트만큼 점프해서 압축카운트 갯수에 맞게 텍스트 전체를 분리함
         for (i in text.indices step pressCount) {
 
-            //마지막으로 추가하는 인덱스인지 체크
             val checkLastIndex = (i + pressCount) - 1
+
             if (checkLastIndex < text.length - 1)
+//                "i.. stepCount list.add("asd") "
                 list.add(text.slice(i..checkLastIndex))
             else
+                //마지막 루프 add가 마지막으로 되는 턴
                 list.add(text.slice(i until text.length))
 
         }
@@ -48,6 +56,7 @@ private fun `문자열_압축`(text: String): Int {
         //맨마지막에 [i+1]를 비교해야되기 때문에 -1
         for (i in 0 until it.size - 1) {
             when {
+
                 //현재 인덱스의 스트링과 다음 인덱스의 스트링이 같지 않다면 string 변수에 +=
                 it[i] != it[i + 1] -> {
                     //최소 2개의 카운트 이상일때 다음과 이전이 다르다면
@@ -60,7 +69,6 @@ private fun `문자열_압축`(text: String): Int {
                     //count 1부터 맞지않는다면 바로 문자열 할당
                     else
                         result += it[i]
-
                 }
                 //현재와 다음이 맞다면 count ++
                 it[i] == it[i + 1] -> count++
@@ -74,15 +82,19 @@ private fun `문자열_압축`(text: String): Int {
             it.last()
 
         println(result)
+        //asdasdasdasd
+
         result.length
     }
 
     var answer = text.length
     for (pressCount in 1..text.length) {
+        //input으로 받은 해당 text 의 압축갯수만큼 List<String> 를 만들고나서
         val getCount = getStringDigit(toList(pressCount))
 
         //answer 보다 getCount 가 적다면 answer 에 재할당
         if (getCount < answer) {
+            //모든답중에 가장 문자열이 짦은것을 필터링 해줌
             answer = getCount
         }
     }
@@ -94,10 +106,15 @@ fun `오픈채팅방`(record: MutableList<String>):Array<String>{
 
     //유저의 정보만 표시할 Map
     val user = mutableMapOf<String, String>()
+
+    //Array<String>
     return record
             .map {
                 //공백기준으로 알림 id 닉네임 3가지를 분리시켜 리스트로 만듬
+                //size가 3개인 리스트로 r 일단 만들어줌
+                //"enter", "id","name"
                 val r = it.split(" ")
+
                 //리스트의 첫번째 인덱스는 알림임
                 val action = r.first()
                 when (action) {
@@ -105,13 +122,17 @@ fun `오픈채팅방`(record: MutableList<String>):Array<String>{
                     "Enter", "Change" -> user += r[1] to r[2]
                 }
                 r
+//                r를 다 리턴해줌으로써
+                //1차원 배열 -> 2차원 배열
             }
-            .asSequence()
             //Change 표시 없는것만 필터링
             .filter {
                 //방 입/퇴장 컨트롤을 위해 Change 알림인 아이템은 잠시 제거
                 it[0] != "Change" }
             .map {
+
+//                it[0] -> "Enter나 Leave와 같은 행위"
+//                it[1] -> 유저네임
 
                 //유저 이름을 따로 추출
                 val nickName = user[it[1]]
@@ -123,6 +144,8 @@ fun `오픈채팅방`(record: MutableList<String>):Array<String>{
                 }
                 //추출한 2가지를 합침
                 "$nickName$explanation"
+                //"유저이름" + 상태 => String
+                //map 으로 인해서 1차원 배열로 바뀌어버림
             }
             //콜렉션 함수에 의해 모두 변형 후 리턴됨
             .toList().toTypedArray()
@@ -131,7 +154,9 @@ fun `오픈채팅방`(record: MutableList<String>):Array<String>{
 //https://programmers.co.kr/learn/courses/30/lessons/62048
 //초 5 경시 대회 https://m.blog.naver.com/orbis1020/220664563768
 fun `멀쩡한_사각형`(w: Int, h: Int): Long {
-    fun gcd(a: Int, b: Int): Int = if (a % b == 0) b else gcd(b, a % b)
+    fun gcd(a: Int, b: Int): Int = if (a % b == 0) b else
+                gcd(b, a % b)
+
     return w.toLong() * h - (w.toLong() + h - gcd(w, h))
 }
 
