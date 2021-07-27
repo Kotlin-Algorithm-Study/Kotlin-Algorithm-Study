@@ -1,15 +1,34 @@
 package kr.loner.kotlinalgorithmstudy.loner
 
+import java.lang.StringBuilder
 import java.util.Collections.rotate
 
 
-
-
-fun main(){
-
+fun main() {
+    수식최대화("100-200*300-500+20")
 }
-class `테두리_회전하기`{
-    var matrix:Array<IntArray> = arrayOf(intArrayOf())
+
+fun `수식최대화`(expression: String): Long {
+    var answer = 0L
+    var formulaList = arrayOf("-+*", "-*+", "+-*","+*-","*-+","*+-")
+    expression.map {
+
+    }
+//    formulaList.forEach {  formula->
+//        val cal = formula.map { it }
+//        cal.forEach {
+//            when(it){
+//                "-" ->
+//            }
+//        }
+//    }
+
+    return answer
+}
+
+
+class `테두리_회전하기` {
+    var matrix: Array<IntArray> = arrayOf(intArrayOf())
 
     fun solution(rows: Int, columns: Int, queries: Array<IntArray?>): IntArray? {
 
@@ -26,31 +45,31 @@ class `테두리_회전하기`{
         return answer
     }
 
-    fun rotate(qurey: IntArray ):Int{
-        var r1 = qurey[0]-1
-        var c1 = qurey[1]-1
+    fun rotate(qurey: IntArray): Int {
+        var r1 = qurey[0] - 1
+        var c1 = qurey[1] - 1
         var r2 = qurey[2] - 1
         var c2 = qurey[3] - 1
         var temp = matrix[r1][c1]
         var min = temp
-        for(i in 0..r2){
-            matrix[i][c1] = matrix[i+1][c1]
-            if(min > matrix[i][c1]) min = matrix[i][c1]
+        for (i in 0..r2) {
+            matrix[i][c1] = matrix[i + 1][c1]
+            if (min > matrix[i][c1]) min = matrix[i][c1]
         }
-        for(i in 0..c2){
-            matrix[r2][i] = matrix[r2][i+1]
-            if(min > matrix[r2][i]) min = matrix[r2][i]
+        for (i in 0..c2) {
+            matrix[r2][i] = matrix[r2][i + 1]
+            if (min > matrix[r2][i]) min = matrix[r2][i]
         }
-        for (i in 0..r1){
-            this.matrix[i][c2] = this.matrix[i-1][c2]
-            if(min > this.matrix[i][c2]) min = this.matrix[i][c2]
+        for (i in 0..r1) {
+            this.matrix[i][c2] = this.matrix[i - 1][c2]
+            if (min > this.matrix[i][c2]) min = this.matrix[i][c2]
         }
-        for(i in 0..c1){
-            matrix[r1][i] = matrix[r1][i-1]
-            if(min > matrix[r1][i]) min = matrix[r1][i]
+        for (i in 0..c1) {
+            matrix[r1][i] = matrix[r1][i - 1]
+            if (min > matrix[r1][i]) min = matrix[r1][i]
         }
 
-        matrix[r1][c1+1] = temp
+        matrix[r1][c1 + 1] = temp
         return min
     }
 

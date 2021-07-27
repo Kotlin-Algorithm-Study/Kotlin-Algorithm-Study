@@ -2,7 +2,9 @@ package kr.loner.kotlinalgorithmstudy.loner
 
 
 fun main() {
-    println(문자열_압축("asdasdasd"))}
+//    println(문자열_압축("asdasdasd"))
+    println(멀쩡한_사각형(8,12))
+}
 
 //https://programmers.co.kr/learn/courses/30/lessons/60057
 private fun `문자열_압축`(text: String): Int {
@@ -14,7 +16,7 @@ private fun `문자열_압축`(text: String): Int {
         //input Text
         //input ex: asdasdasd
         // 압축 갯수가 3개면
-        // List<String> { "asd","asd","asd"}
+        // output listOf<String>("asd","asd","asd")
 
         //step 으로 압축 카운트만큼 점프해서 압축카운트 갯수에 맞게 텍스트 전체를 분리함
         for (i in text.indices step pressCount) {
@@ -25,11 +27,10 @@ private fun `문자열_압축`(text: String): Int {
 //                "i.. stepCount list.add("asd") "
                 list.add(text.slice(i..checkLastIndex))
             else
-                //마지막 루프 add가 마지막으로 되는 턴
+            //마지막 루프 add가 마지막으로 되는 턴
                 list.add(text.slice(i until text.length))
 
         }
-//        println(list.toString())
         /* output
         [a, s, d, a, s, d, a, s, d, a, s, d]
         [as, da, sd, as, da, sd]
@@ -47,8 +48,7 @@ private fun `문자열_압축`(text: String): Int {
         list
     }
 
-    //분리한 List<String> 을 매개변수로 받아서 압축카운트에
-    // 맞는 문자열을 만들고 최종 문자열의 사이즈를 리턴하는 일급객체
+    //분리한 List<String> 을 매개변수로 받아서 압축카운트에 맞는 문자열을 만들고 최종 문자열의 사이즈를 리턴하는 일급객체
     val getStringDigit: (MutableList<String>) -> Int = {
         var result = ""
         var count = 1
@@ -82,19 +82,16 @@ private fun `문자열_압축`(text: String): Int {
             it.last()
 
         println(result)
-        //asdasdasdasd
 
         result.length
     }
 
     var answer = text.length
     for (pressCount in 1..text.length) {
-        //input으로 받은 해당 text 의 압축갯수만큼 List<String> 를 만들고나서
         val getCount = getStringDigit(toList(pressCount))
 
         //answer 보다 getCount 가 적다면 answer 에 재할당
         if (getCount < answer) {
-            //모든답중에 가장 문자열이 짦은것을 필터링 해줌
             answer = getCount
         }
     }
@@ -102,7 +99,7 @@ private fun `문자열_압축`(text: String): Int {
 }
 
 //https://programmers.co.kr/learn/courses/30/lessons/42888
-fun `오픈채팅방`(record: MutableList<String>):Array<String>{
+fun `오픈채팅방`(record: MutableList<String>): Array<String> {
 
     //유저의 정보만 표시할 Map
     val user = mutableMapOf<String, String>()
@@ -128,7 +125,8 @@ fun `오픈채팅방`(record: MutableList<String>):Array<String>{
             //Change 표시 없는것만 필터링
             .filter {
                 //방 입/퇴장 컨트롤을 위해 Change 알림인 아이템은 잠시 제거
-                it[0] != "Change" }
+                it[0] != "Change"
+            }
             .map {
 
 //                it[0] -> "Enter나 Leave와 같은 행위"
@@ -154,9 +152,15 @@ fun `오픈채팅방`(record: MutableList<String>):Array<String>{
 //https://programmers.co.kr/learn/courses/30/lessons/62048
 //초 5 경시 대회 https://m.blog.naver.com/orbis1020/220664563768
 fun `멀쩡한_사각형`(w: Int, h: Int): Long {
-    fun gcd(a: Int, b: Int): Int = if (a % b == 0) b else
-                gcd(b, a % b)
-
+    //가로 % 세로 나머지가 0이 될때 까지 구하는 재귀함수
+    fun gcd(w: Int, h: Int): Int =
+            if (w % h == 0) {
+                h
+            }
+            else{
+                gcd(h, w % h)
+            }
+    //가로 * 세로 - (가로+세로 - 재귀결과)
     return w.toLong() * h - (w.toLong() + h - gcd(w, h))
 }
 
